@@ -4,11 +4,34 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: '微軟正黑體', sans-serif;
 }
 
 .ibox-content.sty-box-content {
   padding: 20px 50px;
 }
+
+.sty-box-title {
+  display: flex;
+  align-items: center;
+  p {
+    margin: 0;
+  }
+}
+
+.sty-link {
+  padding: 5px 10px;
+  color: $orange;
+  border: 1px solid transparent;
+  font-weight: $font-bold;
+  transition: 0.3s;
+  margin-left: 100px;
+  &:hover {
+    border: 1px solid $orange;
+    color: $orange;
+  }
+}
+
 .sty-addForm {
   font-size: 16px;
   input {
@@ -32,7 +55,7 @@
     }
   }
   input[type='text'] {
-    padding: 5px 12px;
+    padding: 3px 12px;
     border: 1px solid #ddd;
     &:focus {
       outline: 1px solid #28a745;
@@ -63,11 +86,8 @@
   .sty-flex {
     display: flex;
     width: 100%;
-    margin: 0;
-    // align-items: center;
-
-    margin-bottom: 8px;
-    div {
+    margin: 0 0 8px;
+    > div {
       padding: 0 15px 0 0;
     }
   }
@@ -75,9 +95,22 @@
     font-size: $font-xs;
     margin: 0 0 0 100px;
   }
+  .upload {
+    padding: 10px 50px;
+    background-color: transparent;
+    border: 1px solid $black;
+    color: $black;
+    font-weight: $font-bold;
+    transition: 0.3s;
+    &:hover {
+      color: $white;
+      background-color: $black;
+    }
+  }
 }
 
 .sty-addButton {
+  cursor: pointer;
   padding: 10px 50px;
   background-color: $blue;
   border: none;

@@ -16,6 +16,9 @@ import { bindActionCreators } from 'redux'
 import Header from './component/common/Header'
 import Banner from './component/common/Banner'
 import AddCoupon from './component/stacey/AddCoupon'
+import CouponList from './component/stacey/CouponList'
+import AdList from './component/stacey/AdList'
+
 
 
 const pageName = '訊息'
@@ -32,7 +35,18 @@ const Promote = () => {
       <div id="page-wrapper" className="gray-bg" style={bgStyle}>
         <Header />
         <Banner pageName={pageName} />
-        <AddCoupon />
+        <Switch>
+          <Route path="/Promote/couponList">
+            <CouponList />
+          </Route>
+          <Route path="/Promote/addCoupon">
+            <AddCoupon />
+          </Route>
+          <Route path="/Promote/adList">
+            <AdList />
+          </Route>
+        </Switch>
+        
       </div>
     </>
   )
