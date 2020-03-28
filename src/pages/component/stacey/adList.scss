@@ -1,13 +1,13 @@
 @import '../../../css/variables.scss';
 
 .sty-alertBox {
+  display: none;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1;
-
   background-color: #00000052;
   .stateBox {
     padding: 20px 30px;
@@ -48,15 +48,19 @@
   }
 }
 
+.sty-alertBox.active {
+  display: block;
+}
+
 .stateBox h3 {
   font-size: 20px;
   margin: 10px 0 40px;
 }
 
-.stateBox .sty label {
+.stateBox .sty-inputGroup label {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .sty-ad-table {

@@ -31,10 +31,24 @@ import { bindActionCreators } from 'redux'
 
 const AdListItem = (props) => {
 
+  const adClickItemData = useSelector(state => state.adClickItemData)
+  const dispatch = useDispatch()
+
   const [open , setOpen] = useState(false)
 
   const redStyle = classnames({styRed: props.item.planStatus === '上架'})
   const adDetailStyle = classnames('ad-detail',{active: open})
+
+  const clickItem = ()=>{
+    dispatch({type:'CLICK_DATA',value:{
+      planId:props.item.planId,
+      planStatus:props.item.planStatus,
+      planName:props.item.planName,
+      adName:props.item.adName,
+      abContent:props.item.abContent,
+      adImg:props.item.adImg,
+    }})
+  }
 
   let planGroup = ''
   switch(props.item.planGroup){
@@ -138,7 +152,8 @@ const AdListItem = (props) => {
   return (
         <>
             <tr>
-              <td><button class="btn btn-sm btn-info setState">設定</button></td>
+              <td><button class="btn btn-sm btn-info setState" onClick={()=>{clickItem()
+              props.alertFunc()}}>設定</button></td>
               <td >{planGroup}</td>
               <td>{props.item.planName}</td>
               <td>{props.item.planPlace}</td>
@@ -147,7 +162,7 @@ const AdListItem = (props) => {
               <td>{props.item.planStartTime}</td>
               <td>{props.item.planDueTime}</td>
               <td><button class="fa fa-angle-double-down btn btn-circle adInfo" onClick={()=>setOpen(!open)} ></button></td>
-              <td><button class="fa fa-angle-double-down btn btn-circle adInfo" ></button></td>
+              <td><button class="fa fa-angle-double-down btn btn-circle adInfo"  onClick={()=>{clickItem()}} ></button></td>
             </tr>
             <tr className={adDetailStyle}>
               <td></td>

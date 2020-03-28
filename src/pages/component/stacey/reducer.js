@@ -17,4 +17,12 @@ export const adListData = (state = [], action) => {
         return state
     }
 }
-  
+
+export const adClickItemData = (state = {}, action) => {
+  switch (action.type) {
+    case 'CLICK_DATA':
+      return action.value
+    default:
+      return state
+  }
+}

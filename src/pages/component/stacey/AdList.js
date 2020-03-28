@@ -8,6 +8,9 @@ import {
   withRouter,
 } from 'react-router-dom'
 
+import classnames from 'classnames'
+
+
 //sweetalert2
 import { withSwalInstance } from 'sweetalert2-react';
 import swal from 'sweetalert2';
@@ -30,8 +33,16 @@ import { bindActionCreators } from 'redux'
 
 const AdList = () => {
 
+  // const [state,setState] = useState('')
+  const [stateAlert,setStateAlert] = useState(false)
+  
+
+  const stateAlertStyle = classnames('sty-alertBox',{active:stateAlert})
+
+  const adClickItemData = useSelector(state => state.adClickItemData)
   const data = useSelector(state => state.adListData)
-    const dispatch = useDispatch()
+
+  const dispatch = useDispatch()
 
     async function getData (){
         const request = new Request('http://localhost:5500/getCoupon/backAdData', {
@@ -46,34 +57,49 @@ const AdList = () => {
       const val = await res.json()
       dispatch({type:'SHOW_DATA',value:val})
     }
-    console.log(data)
+    // console.log(stateAlert)
 
-
+    async function setAd (){
+      const stateValue = document.querySelector('input[name="status"]:checked').value;
+      console.log(stateValue)
+      // const request = new Request('http://localhost:5500/getCoupon/backAdSetState', {
+      //   method: 'POST',
+      //   credentials: 'include',
+      //     headers: new Headers({
+      //       Accept: 'application/json',
+      //       'Content-Type': 'application/json',
+      //     }),
+      //     body:{planId:adClickItemData.planId,
+      //           planStatus:}
+      // })
+      // const res = await fetch(request)
+      // const val = await res.json()
+    }
 
     useEffect(()=>{
-        getData()
+      getData()
     },[])
 
+    
 
     
     return (
         <>
-        <div className="sty-alertBox">
+        <div className={stateAlertStyle}>
           <div class="stateBox">
             <h3>狀態變更為: </h3>
             <div class="sty-inputGroup">
-                <input type="radio" name="status" value="審核" id="0"/>
+                <input type="radio" name="status" value="審核" id="0" checked={adClickItemData.planStatus === '審核'}/>
                 <label htmlFor="0"><div className="sty-radio"></div>審核</label>
-                <input type="radio" name="status" value="上架" id="1"/>
+                <input type="radio" name="status" value="上架" id="1" checked={adClickItemData.planStatus === '上架'}/>
                 <label htmlFor="1"><div className="sty-radio"></div>上架</label>
-                <input type="radio" name="status" value="下架" id="2"/>
+                <input type="radio" name="status" value="下架" id="2" checked={adClickItemData.planStatus === '下架'}/>
                 <label htmlFor="2"><div className="sty-radio"></div>下架</label>
             </div>
-            <input type="hidden" class="editId" name="editId" value=""/>
-            {/* <div> */}
+            <input type="hidden" class="editId" name="editId" value=""/>            
             <div class="d-flex justify-content-between">
-                <button class="btn btn-w-m toggle">取消</button>
-                <button class="btn btn-w-m  btn-success submit">確認</button>
+                <button class="btn btn-w-m" onClick={()=>setStateAlert(!stateAlert)}>取消</button>
+                <button class="btn btn-w-m  btn-success" onClick={()=>{setAd()}}>確認</button>
             </div>
           </div>
         </div>
@@ -100,7 +126,7 @@ const AdList = () => {
                         </thead>
                         <tbody>
                           {data.length > 0 ? data.map((val,ind)=>{
-                            return <AdListItem key={ind} item={val} />
+                            return <AdListItem key={ind} item={val} alertFunc={()=>{setStateAlert(!stateAlert)}}/>
                           }) : ''}
                         </tbody>
                       </table>
