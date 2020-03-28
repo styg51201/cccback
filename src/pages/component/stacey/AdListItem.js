@@ -29,6 +29,14 @@ import { connect } from 'react-redux'
 //action
 import { bindActionCreators } from 'redux'
 
+
+//icon
+import { IconContext } from 'react-icons'
+import {
+  FiChevronsRight
+} from 'react-icons/fi'
+
+
 const AdListItem = (props) => {
 
   const adClickItemData = useSelector(state => state.adClickItemData)
@@ -37,7 +45,7 @@ const AdListItem = (props) => {
   const [open , setOpen] = useState(false)
 
   const redStyle = classnames({styRed: props.item.planStatus === '上架'})
-  const adDetailStyle = classnames('ad-detail',{active: open})
+  const adPlanGroupStyle = classnames('planGroup',{active: open})
 
   const clickItem = ()=>{
     dispatch({type:'CLICK_DATA',value:{
@@ -45,20 +53,21 @@ const AdListItem = (props) => {
       planStatus:props.item.planStatus,
       planName:props.item.planName,
       adName:props.item.adName,
-      abContent:props.item.abContent,
+      adTitle:props.item.adTitle,
+      adContent:props.item.adContent,
       adImg:props.item.adImg,
     }})
   }
 
-  let planGroup = ''
-  switch(props.item.planGroup){
-    case 0:
-      planGroup = '所有人'
-     break
-    case 1:
-      planGroup = '再行銷族群'
-     break
-  }
+  
+  // switch(props.item.planGroup){
+  //   case 0:
+  //     planGroup = '所有人'
+  //    break
+  //   case 1:
+  //     planGroup = '再行銷族群'
+  //    break
+  // }
 
   let groupBuyItems = ''
   switch(props.item.groupBuyItems){
@@ -147,41 +156,39 @@ const AdListItem = (props) => {
      break
   }
 
+  let planGroup = (
+    <td className={adPlanGroupStyle}>
+    <span onClick={()=>setOpen(!open)} > 再行銷族群 <FiChevronsRight /> </span>
+    <ul>
+      {groupBuyItems}
+      {groupHistoryItems}
+      {groupCollectItems}
+      {groupHistoryCategory}
+      {groupCollectCategory}
+      {groupCartCategory}
+    </ul>
+  </td>
+)
+
 
 
   return (
         <>
             <tr>
-              <td><button class="btn btn-sm btn-info setState" onClick={()=>{clickItem()
-              props.alertFunc()}}>設定</button></td>
-              <td >{planGroup}</td>
+              <td><button class="btn btn-sm btn-info setState" 
+              onClick={()=>{clickItem()
+                            props.alertFunc()}}>設定</button></td>
+              {props.item.planGroup ? planGroup : <td>所有人</td>}
               <td>{props.item.planName}</td>
               <td>{props.item.planPlace}</td>
               <td>{props.item.planClick}</td>
               <td className={redStyle}>{props.item.planStatus}</td>
               <td>{props.item.planStartTime}</td>
               <td>{props.item.planDueTime}</td>
-              <td><button class="fa fa-angle-double-down btn btn-circle adInfo" onClick={()=>setOpen(!open)} ></button></td>
-              <td><button class="fa fa-angle-double-down btn btn-circle adInfo"  onClick={()=>{clickItem()}} ></button></td>
-            </tr>
-            <tr className={adDetailStyle}>
-              <td></td>
-              <td>
-                {props.item.planGroup ? 
-                <ul>
-                  {groupBuyItems}
-                  {groupHistoryItems}
-                  {groupCollectItems}
-                  {groupHistoryCategory}
-                  {groupCollectCategory}
-                  {groupCartCategory}
-                </ul>
-                : '-'}
-              </td>
-              <td colspan={7} className="sty-ad-show">
-                
-              </td>
-
+              {/* <td><button class="fa fa-angle-double-down btn btn-circle adInfo" onClick={()=>setOpen(!open)} ></button></td> */}
+              <td><button class="fa fa-angle-double-down btn btn-circle adInfo"  onClick={()=>{clickItem()
+                props.showFunc()
+              }} ></button></td>
             </tr>
         </>
   )

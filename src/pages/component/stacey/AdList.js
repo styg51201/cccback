@@ -31,17 +31,25 @@ import { connect } from 'react-redux'
 //action
 import { bindActionCreators } from 'redux'
 
+//icon
+import { IconContext } from 'react-icons'
+import {
+  FiXCircle
+} from 'react-icons/fi'
+
+
 const AdList = () => {
 
-  // const [state,setState] = useState('')
+  const [showAlert,setShowAlert] = useState(false)
   const [stateAlert,setStateAlert] = useState(false)
+  // const [stateVal,setStateVal] = useState('')
   
 
-  const stateAlertStyle = classnames('sty-alertBox',{active:stateAlert})
+  const stateAlertStyle = classnames('sty-alertBox',{active:stateAlert || showAlert})
 
   const adClickItemData = useSelector(state => state.adClickItemData)
   const data = useSelector(state => state.adListData)
-
+  console.log(adClickItemData)
   const dispatch = useDispatch()
 
     async function getData (){
@@ -61,20 +69,32 @@ const AdList = () => {
 
     async function setAd (){
       const stateValue = document.querySelector('input[name="status"]:checked').value;
-      console.log(stateValue)
-      // const request = new Request('http://localhost:5500/getCoupon/backAdSetState', {
-      //   method: 'POST',
-      //   credentials: 'include',
-      //     headers: new Headers({
-      //       Accept: 'application/json',
-      //       'Content-Type': 'application/json',
-      //     }),
-      //     body:{planId:adClickItemData.planId,
-      //           planStatus:}
-      // })
-      // const res = await fetch(request)
-      // const val = await res.json()
+
+      const request = new Request('http://localhost:5500/getCoupon/backAdSetState', {
+        method: 'POST',
+        credentials: 'include',
+          headers: new Headers({
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          }),
+          body:JSON.stringify({planId:adClickItemData.planId,
+                planStatus:stateValue})
+      })
+      const res = await fetch(request)
+      const val = await res.json()
+
+      console.log(val)
+
+      for(let i= 0 ; i<data.length ;i++){
+        if(data[i].planId === adClickItemData.planId){
+          data[i].planStatus = stateValue
+          break
+        }
+      }
+      dispatch({type:'SHOW_DATA',value:data})
+      setStateAlert(!stateAlert)
     }
+
 
     useEffect(()=>{
       getData()
@@ -82,27 +102,57 @@ const AdList = () => {
 
     
 
+  const alertBox = (
+                    <div className={stateAlertStyle}>
+                      <div class="stateBox">
+                        <h3>狀態變更為: </h3>
+                        <div class="sty-inputGroup">
+                          
+                            <input type="radio" name="status" value="審核" id="0"/>
+                            <label htmlFor="0"><div className="sty-radio"></div>審核</label>
+                            <input type="radio" name="status" value="上架" id="1"/>
+                        
+                            <label htmlFor="1"><div className="sty-radio"></div>上架</label>
+                            <input type="radio" name="status" value="下架" id="2"/>
+                            <label htmlFor="2"><div className="sty-radio"></div>下架</label>
+                        </div>
+                        <input type="hidden" class="editId" name="editId" value=""/>            
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-w-m" onClick={()=>{
+                            setStateAlert(!stateAlert)
+                            }}>取消</button>
+                            <button class="btn btn-w-m  btn-success" onClick={()=>{setAd()}}>確認</button>
+                        </div>
+                      </div>
+                    </div>
+                    )
+
+    const showBox = (
+                      <div className={stateAlertStyle}>
+                        <div className="showBox">
+                          <div className="show-close" onClick={()=>setShowAlert(!showAlert)}><FiXCircle /></div>
+                          <div className="show-num">#1</div>
+                          <div className="show-title">熱賣商品</div>
+                            <div className="show-img">
+                              <img src={`/img/ad-img/${adClickItemData.adImg}`} alt="" />
+                            </div>
+                            <div className="show-txt">
+                              <h3>{adClickItemData.adName}</h3>
+                              <h6>{adClickItemData.adTitle}</h6>
+                              <p>{adClickItemData.adContent}</p>
+                              <button>查看商品</button>
+                            </div>
+                        </div>
+                      </div>
+
+    )
+   
     
     return (
         <>
-        <div className={stateAlertStyle}>
-          <div class="stateBox">
-            <h3>狀態變更為: </h3>
-            <div class="sty-inputGroup">
-                <input type="radio" name="status" value="審核" id="0" checked={adClickItemData.planStatus === '審核'}/>
-                <label htmlFor="0"><div className="sty-radio"></div>審核</label>
-                <input type="radio" name="status" value="上架" id="1" checked={adClickItemData.planStatus === '上架'}/>
-                <label htmlFor="1"><div className="sty-radio"></div>上架</label>
-                <input type="radio" name="status" value="下架" id="2" checked={adClickItemData.planStatus === '下架'}/>
-                <label htmlFor="2"><div className="sty-radio"></div>下架</label>
-            </div>
-            <input type="hidden" class="editId" name="editId" value=""/>            
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-w-m" onClick={()=>setStateAlert(!stateAlert)}>取消</button>
-                <button class="btn btn-w-m  btn-success" onClick={()=>{setAd()}}>確認</button>
-            </div>
-          </div>
-        </div>
+        {stateAlert && alertBox}
+        {showAlert && showBox}
+        
           <div className="wrapper-content">
               <div className="ibox">
                   <div className="ibox-title">
@@ -120,13 +170,12 @@ const AdList = () => {
                             <th>狀態</th>
                             <th>開始時間</th>
                             <th>結束時間</th>
-                            <th>詳細資訊</th>
                             <th>預覽</th>
                           </tr>
                         </thead>
                         <tbody>
                           {data.length > 0 ? data.map((val,ind)=>{
-                            return <AdListItem key={ind} item={val} alertFunc={()=>{setStateAlert(!stateAlert)}}/>
+                            return <AdListItem key={ind} item={val} alertFunc={()=>{setStateAlert(!stateAlert)}} showFunc={()=>{setShowAlert(!showAlert)}}/>
                           }) : ''}
                         </tbody>
                       </table>

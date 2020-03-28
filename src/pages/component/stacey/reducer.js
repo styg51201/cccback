@@ -13,6 +13,8 @@ export const adListData = (state = [], action) => {
     switch (action.type) {
       case 'SHOW_DATA':
         return action.value
+      case 'EDIT_DATA':
+        return action.value
       default:
         return state
     }
