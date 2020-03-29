@@ -42,7 +42,7 @@ const AdList = () => {
 
   const [showAlert,setShowAlert] = useState(false)
   const [stateAlert,setStateAlert] = useState(false)
-  // const [stateVal,setStateVal] = useState('')
+  const [loading,setLoading] = useState(false)
   
 
   const stateAlertStyle = classnames('sty-alertBox',{active:stateAlert || showAlert})
@@ -101,6 +101,15 @@ const AdList = () => {
     },[])
 
     
+    useEffect(()=>{
+      if(loading){
+        setTimeout(()=>{
+          setLoading(false)
+        },800)
+      }
+    },[loading])
+
+    
 
   const alertBox = (
                     <div className={stateAlertStyle}>
@@ -130,7 +139,7 @@ const AdList = () => {
     const showBox = (
                       <div className={stateAlertStyle}>
                         <div className="showBox">
-                          <div className="show-close" onClick={()=>setShowAlert(!showAlert)}><FiXCircle /></div>
+                        <div className="show-close" onClick={()=>setShowAlert(!showAlert)}><FiXCircle /></div>
                           <div className="show-num">#1</div>
                           <div className="show-title">熱賣商品</div>
                             <div className="show-img">
@@ -144,14 +153,18 @@ const AdList = () => {
                             </div>
                         </div>
                       </div>
-
+    )
+    const loadingBox = (
+      <div className={stateAlertStyle}>
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+      </div>
     )
    
     
     return (
         <>
         {stateAlert && alertBox}
-        {showAlert && showBox}
+        {showAlert &&  loading ? loadingBox : showBox}
         
           <div className="wrapper-content">
               <div className="ibox">
@@ -175,7 +188,7 @@ const AdList = () => {
                         </thead>
                         <tbody>
                           {data.length > 0 ? data.map((val,ind)=>{
-                            return <AdListItem key={ind} item={val} alertFunc={()=>{setStateAlert(!stateAlert)}} showFunc={()=>{setShowAlert(!showAlert)}}/>
+                            return <AdListItem key={ind} item={val} alertFunc={()=>{setStateAlert(!stateAlert)}} showFunc={()=>{setShowAlert(!showAlert)}} loadingFunc={()=>{setLoading(!loading)}}/>
                           }) : ''}
                         </tbody>
                       </table>

@@ -88,8 +88,6 @@ const CouponListItem = (props) => {
      break
   }
 
-
-
     return (
         <>
           <div className="col-6 row sty-item">
@@ -118,13 +116,13 @@ const CouponListItem = (props) => {
             </div>
             <div className="col-4 sty-detail">
               <div>
-                <p>發放總數 : <span>10</span></p>
+                <p>發放總數 : <span>{props.item.cp_count}</span></p>
               </div>
               <div>
-                <p>領取人數 : <span>10</span></p>
+                <p>領取人數 : <span>{props.item.cp_getedCount}</span></p>
               </div>
               <div>
-                <p>使用人數 : <span>10</span></p>
+                <p>使用人數 : <span>{props.item.cp_useCount}</span></p>
               </div>
               
             </div>

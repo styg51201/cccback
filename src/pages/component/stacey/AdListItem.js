@@ -104,16 +104,16 @@ const AdListItem = (props) => {
     case 0:
       groupHistoryCategory = ''
      break
-    case 1:
+    case '穿戴式裝置':
       groupHistoryCategory = <li>瀏覽過穿戴式裝置分類</li>
      break
-    case 2:
+    case '耳機/喇叭':
       groupHistoryCategory = <li>瀏覽過耳機/喇叭分類</li>
      break
-    case 3:
+    case '運動攝影機':
       groupHistoryCategory = <li>瀏覽過運動攝影機分類</li>
      break
-    case 4:
+    case '周邊':
       groupHistoryCategory = <li>瀏覽過周邊產品分類</li>
      break
   }
@@ -123,16 +123,16 @@ const AdListItem = (props) => {
     case 0:
       groupCollectCategory = ''
      break
-    case 1:
+    case '穿戴式裝置':
       groupCollectCategory = <li>收藏裡有穿戴式裝置分類</li>
      break
-    case 2:
+    case '耳機/喇叭':
       groupCollectCategory = <li>收藏裡有耳機/喇叭分類</li>
      break
-    case 3:
+    case '運動攝影機':
       groupCollectCategory = <li>收藏裡有運動攝影機分類</li>
      break
-    case 4:
+    case '周邊':
       groupCollectCategory = <li>收藏裡有周邊產品分類</li>
      break
   }
@@ -142,16 +142,16 @@ const AdListItem = (props) => {
     case 0:
       groupCartCategory = ''
      break
-    case 1:
+    case '穿戴式裝置':
       groupCartCategory = <li>購物車裡有穿戴式裝置分類</li>
      break
-    case 2:
+    case '耳機/喇叭':
       groupCartCategory = <li>購物車裡有耳機/喇叭分類</li>
      break
-    case 3:
+    case '運動攝影機':
       groupCartCategory = <li>購物車裡有運動攝影機分類</li>
      break
-    case 4:
+    case '周邊':
       groupCartCategory = <li>購物車裡有周邊產品分類</li>
      break
   }
@@ -187,6 +187,7 @@ const AdListItem = (props) => {
               <td>{props.item.planDueTime}</td>
               {/* <td><button class="fa fa-angle-double-down btn btn-circle adInfo" onClick={()=>setOpen(!open)} ></button></td> */}
               <td><button class="fa fa-angle-double-down btn btn-circle adInfo"  onClick={()=>{clickItem()
+                props.loadingFunc()
                 props.showFunc()
               }} ></button></td>
             </tr>
