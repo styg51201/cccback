@@ -45,7 +45,9 @@ const AdList = () => {
   const [loading,setLoading] = useState(false)
   
 
-  const stateAlertStyle = classnames('sty-alertBox',{active:stateAlert || showAlert})
+  const stateAlertStyle = classnames('sty-alertBox',{active:stateAlert})
+  const showAlertStyle = classnames('sty-alertBox',{active: showAlert})
+
 
   const adClickItemData = useSelector(state => state.adClickItemData)
   const data = useSelector(state => state.adListData)
@@ -105,7 +107,7 @@ const AdList = () => {
       if(loading){
         setTimeout(()=>{
           setLoading(false)
-        },800)
+        },500)
       }
     },[loading])
 
@@ -137,7 +139,7 @@ const AdList = () => {
                     )
 
     const showBox = (
-                      <div className={stateAlertStyle}>
+                      <div className={showAlertStyle}>
                         <div className="showBox">
                         <div className="show-close" onClick={()=>setShowAlert(!showAlert)}><FiXCircle /></div>
                           <div className="show-num">#1</div>
@@ -155,7 +157,7 @@ const AdList = () => {
                       </div>
     )
     const loadingBox = (
-      <div className={stateAlertStyle}>
+      <div className={showAlertStyle}>
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
       </div>
     )
@@ -165,6 +167,7 @@ const AdList = () => {
         <>
         {stateAlert && alertBox}
         {showAlert &&  loading ? loadingBox : showBox}
+        
         
           <div className="wrapper-content">
               <div className="ibox">
