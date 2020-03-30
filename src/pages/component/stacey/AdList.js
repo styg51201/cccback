@@ -141,7 +141,7 @@ const AdList = () => {
     const showBox = (
                       <div className={showAlertStyle}>
                         <div className="showBox">
-                        <div className="show-close" onClick={()=>setShowAlert(!showAlert)}><FiXCircle /></div>
+                          <div className="show-close" onClick={()=>setShowAlert(!showAlert)}><FiXCircle /></div>
                           <div className="show-num">#1</div>
                           <div className="show-title">熱賣商品</div>
                             <div className="show-img">
