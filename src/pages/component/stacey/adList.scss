@@ -4,6 +4,8 @@
   display: block;
 }
 .sty-alertBox {
+  animation-name: fadeIn;
+  animation-duration: 0.4s;
   display: none;
   position: fixed;
   top: 0;
@@ -53,6 +55,8 @@
 
 .sty-alertBox {
   .showBox {
+    animation-name: zoomIn;
+    animation-duration: 0.5s;
     // background-color: #dddddd;
     width: 1100px;
     height: 700px;
@@ -239,5 +243,29 @@
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    // -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    // transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
