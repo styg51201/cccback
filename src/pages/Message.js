@@ -17,48 +17,68 @@ import {
   getReplyCommentData,
 } from './component/message/actions'
 
+import $ from 'jquery'
+
 //header
 import Header from './component/common/Header'
 import Banner from './component/common/Banner'
 import ProductList from './component/message/ProductList'
 import MessageArea from './component/message/MessageArea'
 
+// icon
+import { FiChevronsUp } from 'react-icons/fi'
+
 const pageName = '訊息'
 
 const bgStyle = {
   flex: 1,
-  height: '300vh',
   padding: '0',
 }
 
 const Message = props => {
-  const [productID, setProductID] = useState('pt001')
+  let isNoComment = true
+  const [productID, setProductID] = useState('2')
 
   useEffect(() => {
     // console.log('Message', props)
     props.getCommentProductlistData()
     props.getUserCommentData()
     props.getReplyCommentData()
+
+    $(document).ready(function() {
+      $('.button').css({
+        position: 'fixed',
+        bottom: 30 + 'px',
+        right: 20 + 'px',
+        transition: '0s',
+        width: '40px',
+        height: '40px',
+        padding: '0px',
+        borderRadius: '40px',
+      })
+    })
   }, [])
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     // console.log('Message', props)
   }, [productID])
 
-  console.log('replyCommentData', props.replyCommentData)
-
+  function gotoTop() {
+    window.scrollTo(0, 0)
+  }
   return (
     <>
       <div id="page-wrapper" className="gray-bg" style={bgStyle}>
         <Header />
         <Banner pageName={pageName} />
-        <div className="wrapper wrapper-content">
+        <div className="wrapper wrapper-content" style={{ fontSize: '14px' }}>
           <div className="row animated fadeInRight">
-            <div className="col-md-4">
+            <div className="col-md-4" style={{ paddingRight: '5px' }}>
               <div className="ibox ">
                 <div className="ibox-title">
                   {/* <!-- 左側的商品列表，預計未來改從資料庫讀取 --> */}
-                  <h5>商品列表</h5>
+                  <h2>商品列表</h2>
                 </div>
                 <div>
                   <div className="ibox-content no-padding border-left-right"></div>
@@ -69,8 +89,8 @@ const Message = props => {
                         return (
                           <ProductList
                             key={ind}
-                            pID={props.productListData[ind].pID}
-                            pName={props.productListData[ind].pName}
+                            pID={props.productListData[ind].itemId}
+                            pName={props.productListData[ind].itemName}
                             updateProductID={id => setProductID(id)}
                           />
                         )
@@ -89,23 +109,23 @@ const Message = props => {
             <div className="col-md-8">
               <div className="ibox">
                 <div className="ibox-title">
-                  <h5 id="product-comment-title">商品評論</h5>
-                  <div className="ibox-tools">
-                    <a className="collapse-link">
-                      <i className="fa fa-chevron-up"></i>
-                    </a>
-                  </div>
+                  <h2 id="product-comment-title">商品評論</h2>
                 </div>
                 <div className="ibox-content">
                   <div>
                     <div className="feed-activity-list">
                       {/* <!-- 評論模版預計放這裡 --></div> */}
+                      {console.log(
+                        'props.userCommentData',
+                        props.userCommentData
+                      )}
                       {props.userCommentData &&
                         props.userCommentData.length !== 0 &&
                         props.userCommentData.map((val, ind) => {
                           if (
                             props.userCommentData[ind].productId === productID
                           ) {
+                            isNoComment = false
                             return (
                               <MessageArea
                                 key={ind}
@@ -116,8 +136,17 @@ const Message = props => {
                                     props.userCommentData[ind].commentId
                                   ]
                                 }
+                                updateData={() => {
+                                  props.getReplyCommentData()
+                                }}
                               />
                             )
+                          }
+                          if (
+                            ind === props.userCommentData.length - 1 &&
+                            isNoComment
+                          ) {
+                            return <h2>這商品現在似乎還沒任何評論</h2>
                           }
                         })}
                     </div>
@@ -126,13 +155,11 @@ const Message = props => {
               </div>
             </div>
           </div>
-          <div className="footer">
-            <div>
-              <strong>Copyright</strong> Traveler3C Company &copy; 2020
-            </div>
-          </div>
         </div>
       </div>
+      <button className="button" onClick={gotoTop}>
+        <FiChevronsUp />
+      </button>
     </>
   )
 }

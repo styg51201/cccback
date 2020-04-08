@@ -1,4 +1,4 @@
-import React, { useEffect , useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import classnames from 'classnames'
@@ -11,20 +11,22 @@ import '../css/plugins/toastr/toastr.min.css'
 // import "../js/plugins/gritter/jquery.gritter.css";
 import './styNav.scss'
 
-
-
 function LeftNav() {
-
   useEffect(() => {}, [])
 
-  const [promoteClick,setPromoteClick] = useState(false)
-  const [couponClick,setCouponClick] = useState(false)
-  const [adClick,setAdClick] = useState(false)
+  const [promoteClick, setPromoteClick] = useState(false)
+  const [couponClick, setCouponClick] = useState(false)
+  const [adClick, setAdClick] = useState(false)
 
-  const promoteOpen = classnames('nav' ,'sty-nav', 'nav-second-level', 'collapse' , {in:promoteClick })
-  const couponActive = classnames({ active : couponClick })
-  const adActive = classnames({ active : adClick })
-
+  const promoteOpen = classnames(
+    'nav',
+    'sty-nav',
+    'nav-second-level',
+    'collapse',
+    { in: promoteClick || couponClick || adClick }
+  )
+  const couponActive = classnames({ active: couponClick })
+  const adActive = classnames({ active: adClick })
 
   // 左選單樣式
   const navStyle = {
@@ -51,16 +53,20 @@ function LeftNav() {
                   className="rounded-circle"
                   src="img/profile_small.jpg"
                 />
-                <a
-                  data-toggle="dropdown"
-                  className="dropdown-toggle"
-                  href="index.html"
+
+                <span
+                  className="block m-t-xs font-bold"
+                  style={{ fontSize: '20px', color: '#fff' }}
                 >
-                  <span className="block m-t-xs font-bold">David Williams</span>
-                  <span className="text-muted text-xs block">
-                    Art Director <b className="caret"></b>
-                  </span>
-                </a>
+                  David Wang
+                </span>
+                <span
+                  className="text-muted text-xs block"
+                  style={{ fontSize: '16px' }}
+                >
+                  GARMIN 銷售總監
+                </span>
+
                 <ul className="dropdown-menu animated fadeInRight m-t-xs">
                   <li>
                     <a className="dropdown-item" href="profile.html">
@@ -90,6 +96,39 @@ function LeftNav() {
             <li className="nav-item">
               <NavLink
                 className="nav-link"
+                to="/Promote/couponList"
+                activeStyle={selectStyle}
+                onClick={() => setPromoteClick(!promoteClick)}
+              >
+                <i className="fa fa-diamond"></i>{' '}
+                <span className="nav-label">行銷</span>
+              </NavLink>
+              <ul className={promoteOpen}>
+                <NavLink
+                  className="nav-link"
+                  to="/Promote/couponList"
+                  onClick={() => {
+                    setCouponClick(!couponClick)
+                    setAdClick(false)
+                  }}
+                >
+                  <li className={couponActive}>優惠券</li>
+                </NavLink>
+                <NavLink
+                  className="nav-link"
+                  to="/Promote/adList"
+                  onClick={() => {
+                    setAdClick(!adClick)
+                    setCouponClick(false)
+                  }}
+                >
+                  <li className={adActive}>廣告</li>
+                </NavLink>
+              </ul>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                className="nav-link"
                 to="/Ship"
                 activeStyle={selectStyle}
               >
@@ -105,7 +144,6 @@ function LeftNav() {
               >
                 <i className="fa fa-envelope"></i>{' '}
                 <span className="nav-label">留言 </span>
-                <span className="label label-warning float-right">16/24</span>
               </NavLink>
             </li>
             <li className="nav-item">
@@ -122,40 +160,11 @@ function LeftNav() {
             <li className="nav-item">
               <NavLink
                 className="nav-link"
-                to="/Promote"
-                activeStyle={selectStyle}
-                onClick={()=>setPromoteClick(!promoteClick)}
-              >
-                <i className="fa fa-diamond"></i>{' '}
-                <span className="nav-label">行銷</span>
-                </NavLink>
-                <ul className={promoteOpen}>
-                  <NavLink
-                  className="nav-link"
-                  to="/Promote/couponList"
-                  onClick={()=>setCouponClick(!couponClick)}
-                  >
-                    <li className={couponActive}>優惠券</li>
-                  </NavLink>
-                  <NavLink
-                  className="nav-link"
-                  to="/Promote/adList"
-                  onClick={()=>setAdClick(!adClick)}
-                  >
-                    <li className={adActive}>廣告</li>
-                  </NavLink>
-                </ul>
-               
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className="nav-link"
                 to="/Chart"
                 activeStyle={selectStyle}
               >
                 <i className="fa fa-bar-chart-o"></i>{' '}
                 <span className="nav-label">報表</span>
-                <span className="fa arrow"></span>
               </NavLink>
               <ul className="nav nav-second-level collapse">
                 <li>

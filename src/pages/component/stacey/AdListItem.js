@@ -14,7 +14,6 @@ import classnames from 'classnames'
 import { withSwalInstance } from 'sweetalert2-react';
 import swal from 'sweetalert2';
 
-//scss
 
 //component
 import CouponListItem from './CouponListItem'
@@ -44,7 +43,7 @@ const AdListItem = (props) => {
 
   const [open , setOpen] = useState(false)
 
-  const redStyle = classnames({styRed: props.item.planStatus === '上架'})
+  const redStyle = classnames({styRed: props.item.planStatus === '上架',styGrey:props.item.planStatus === '下架'})
   const adPlanGroupStyle = classnames('planGroup',{active: open})
 
   const clickItem = ()=>{
@@ -60,14 +59,7 @@ const AdListItem = (props) => {
   }
 
   
-  // switch(props.item.planGroup){
-  //   case 0:
-  //     planGroup = '所有人'
-  //    break
-  //   case 1:
-  //     planGroup = '再行銷族群'
-  //    break
-  // }
+
 
   let groupBuyItems = ''
   switch(props.item.groupBuyItems){
@@ -82,10 +74,10 @@ const AdListItem = (props) => {
   let groupHistoryItems = ''
   switch(props.item.groupHistoryItems){
     case 0:
-      groupBuyItems = ''
+      groupHistoryItems = ''
      break
     case 1:
-      groupBuyItems = <li>瀏覽過我的產品</li>
+      groupHistoryItems = <li>瀏覽過我的產品</li>
      break
   }
 
@@ -178,16 +170,15 @@ const AdListItem = (props) => {
               <td><button class="btn btn-sm btn-info setState" 
               onClick={()=>{clickItem()
                             props.alertFunc()}}>設定</button></td>
+              <td className={redStyle}>{props.item.planStatus}</td>
               {props.item.planGroup ? planGroup : <td>所有人</td>}
               <td>{props.item.planName}</td>
               <td>{props.item.planPlace}</td>
               <td>{props.item.planClick}</td>
-              <td className={redStyle}>{props.item.planStatus}</td>
               <td>{props.item.planStartTime}</td>
               <td>{props.item.planDueTime}</td>
               {/* <td><button class="fa fa-angle-double-down btn btn-circle adInfo" onClick={()=>setOpen(!open)} ></button></td> */}
-              <td><button class="fa fa-angle-double-down btn btn-circle adInfo"  onClick={()=>{clickItem()
-                props.loadingFunc()
+              <td><button class="fa fa-search btn btn-circle adInfo"  onClick={()=>{clickItem()
                 props.showFunc()
               }} ></button></td>
             </tr>
